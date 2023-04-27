@@ -1,9 +1,9 @@
 -- bootstrap lazy.nvim
-require("bootstrap")
+require("configs.bootstrap")
 
+-- sanity
 require("configs.options")
 require("configs.keymaps")
-require("configs.autocmds")
-require("configs.theme")
 
-require("task_utils")
+-- start taskan
+require("taskan").setup({ opts = { theme = "catppuccin-latte" } })
