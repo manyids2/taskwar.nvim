@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+TASKDATA="$XDG_CONFIG_HOME/nvimata/taskan"
+TASKRC="$TASKDATA/.taskrc"
+mkdir -p "$TASKDATA"
+echo "data.location=$TASKDATA" > "$TASKRC"
+touch "$TASKDATA/scratch"
+
+if task list ; then
+    echo "Already initialized"
+else
+  task add project:Introduction +intro First task
+fi
+
+cd "$TASKDATA" || exit
+NVIM_APPNAME="nvimata/taskan" nvim scratch

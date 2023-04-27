@@ -13,5 +13,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup(plugins, opts)
-
+require("lazy").setup({
+  -- folke
+  "folke/which-key.nvim",
+  { "folke/neoconf.nvim", cmd = "Neoconf" },
+  "folke/neodev.nvim",
+  -- theme
+  { "catppuccin/nvim", name = "catppuccin" },
+})
