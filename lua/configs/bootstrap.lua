@@ -16,6 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	-- Usability
 	"folke/which-key.nvim",
+	"nvim-treesitter/playground",
 	{ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" },
 	{
 		"nvim-telescope/telescope.nvim",

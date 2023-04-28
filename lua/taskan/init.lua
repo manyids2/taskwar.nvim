@@ -11,7 +11,7 @@ function M.setup(config)
 		config = {}
 	end
 	local default_config = {
-		home = "projects",
+		home = "list",
 		theme = "catppuccin-latte",
 		keys = {
 			-- basics
@@ -29,9 +29,7 @@ function M.setup(config)
 	config.opts = vim.tbl_extend("keep", if_nil(config.opts, {}), default_config)
 
 	-- START
-	M.state = M.ui.start(config)
-
-  vim.cmd[[:4]]
+	M.ui.start(config)
 end
 
 return M

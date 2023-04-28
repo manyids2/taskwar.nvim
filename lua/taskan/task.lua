@@ -2,6 +2,13 @@ local M = {}
 
 M.cols_line = 4
 M.dashes_line = 5
+M.summary_col = { list = 5, projects = 1, tags = 1 }
+
+function M.extend_table(t1, t2)
+	for _, v in ipairs(t2) do
+		table.insert(t1, v)
+	end
+end
 
 function M.get_cmd_lines(cmd)
 	local output = vim.api.nvim_exec(cmd, true)
@@ -30,9 +37,9 @@ function M.get_cells(line, lengths)
 	return cells
 end
 
-function M.get_ttable(cmd)
+function M.get_ttable(showing)
 	-- Get lengths and columns
-	local lines = M.get_cmd_lines(cmd)
+	local lines = M.get_cmd_lines("!task " .. showing)
 	local lengths = M.get_col_lengths(lines)
 	local columns = M.get_cells(lines[M.cols_line], lengths)
 
@@ -59,15 +66,18 @@ function M.get_ttable(cmd)
 	end
 
 	-- Return table
-	local ttable = { lengths = lengths, columns = columns, cells = cells }
+	local ttable = { title = showing, lengths = lengths, columns = columns, cells = cells }
 	return ttable
 end
 
-function M.cap_output(loutput, k, n_cols)
+function M.cap_output(loutput, k, n_cols, separator)
+	if not separator then
+		separator = " | "
+	end
 	if k ~= n_cols then
-		loutput = loutput .. " | "
+		loutput = loutput .. separator
 	else
-		loutput = loutput .. " |"
+		loutput = loutput .. separator
 	end
 	return loutput
 end
@@ -94,23 +104,38 @@ function M.format_separator(columns, lengths, n_cols)
 	return loutput
 end
 
-function M.format_ttable(ttable)
+function M.get_as_list(cells, columns)
 	local loutput
-	local output = {}
-	local n_cols = vim.tbl_count(ttable.columns)
+	local output = { "" }
+	for k, cell in pairs(cells) do
+		loutput = "  - " .. columns[k] .. " : " .. cell
+		table.insert(output, loutput)
+	end
+	table.insert(output, "")
+	return output
+end
 
-	-- header
-	loutput = M.format_cells(ttable.columns, ttable.lengths, n_cols)
-	table.insert(output, loutput)
-
-	-- separator
-	loutput = M.format_separator(ttable.columns, ttable.lengths, n_cols)
-	table.insert(output, loutput)
+function M.format_ttable(ttable, format)
+	local loutput
+	local output = { "# " .. ttable.title, "" }
 
 	-- rows
-	for _, cells in pairs(ttable.cells) do
-		loutput = M.format_cells(cells, ttable.lengths, n_cols)
-		table.insert(output, loutput)
+	if format == "sections" then
+		for _, cells in pairs(ttable.cells) do
+			M.extend_table(output, { "## " .. cells[1] })
+			loutput = M.get_as_list(cells, ttable.columns)
+			M.extend_table(output, loutput)
+		end
+	else
+		for _, cells in pairs(ttable.cells) do
+			if string.len(cells[1]) > 0 then
+				loutput = "- [ ] "
+			else
+				loutput = "      "
+			end
+			loutput = loutput .. cells[M.summary_col[ttable.title]]
+			table.insert(output, loutput)
+		end
 	end
 	return output
 end
