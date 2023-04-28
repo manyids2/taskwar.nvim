@@ -11,8 +11,8 @@ M.state = {
 	dirty = true,
 }
 
-local keymaps = require("taskan.keymaps")
-local task = require("taskan.task")
+local keymaps = require("taskwar.keymaps")
+local task = require("taskwar.task")
 
 -- shortcuts
 local api = vim.api

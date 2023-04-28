@@ -5,5 +5,5 @@ require("configs.bootstrap")
 require("configs.options")
 require("configs.keymaps")
 
--- start taskan
-require("taskan").setup({ opts = { theme = "catppuccin-latte" } })
+-- start taskwar
+require("taskwar").setup({ opts = { theme = "catppuccin-latte" } })

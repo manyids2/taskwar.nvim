@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-TASKDATA="$XDG_CONFIG_HOME/nvimata/taskan"
+TASKDATA="$XDG_CONFIG_HOME/nvimata/taskwar"
 TASKRC="$TASKDATA/.taskrc"
 mkdir -p "$TASKDATA"
 echo "data.location=$TASKDATA" > "$TASKRC"
@@ -13,4 +13,4 @@ else
 fi
 
 cd "$TASKDATA" || exit
-NVIM_APPNAME="nvimata/taskan" nvim scratch
+NVIM_APPNAME="nvimata/taskwar" nvim scratch

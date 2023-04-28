@@ -2,8 +2,8 @@ local if_nil = vim.F.if_nil
 
 local M = {}
 
-M.task = require("taskan.task")
-M.ui = require("taskan.ui")
+M.task = require("taskwar.task")
+M.ui = require("taskwar.ui")
 
 function M.setup(config)
 	-- config stuff
