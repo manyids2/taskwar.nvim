@@ -7,6 +7,7 @@ M.state = {
 	win_width = 0,
 	open = true,
 	ttable = nil,
+	format = "sections",
 	dirty = true,
 }
 
@@ -26,7 +27,7 @@ function M.render()
 
 	if M.state.dirty then
 		-- table
-		local lines = task.format_ttable(ttable)
+		local lines = task.format_ttable(ttable, M.state.format)
 		api.nvim_buf_set_lines(buffer, -1, -1, false, lines)
 	end
 end
@@ -50,6 +51,7 @@ function M.start(config)
 	M.state.buffer = buffer
 	M.state.window = window
 	M.state.ttable = ttable
+	M.state.format = config.opts.format
 
 	-- keymaps
 	keymaps.set_keymaps(config.opts.keys, M.state)

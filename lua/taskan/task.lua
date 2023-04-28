@@ -37,6 +37,14 @@ function M.get_cells(line, lengths)
 	return cells
 end
 
+function M.append_cells(t1, t2, sep)
+	local out = {}
+	for k, v in pairs(t1) do
+		out[k] = v .. sep .. t2[k]
+	end
+	return out
+end
+
 function M.get_ttable(showing)
 	-- Get lengths and columns
 	local lines = M.get_cmd_lines("!task " .. showing)
@@ -65,8 +73,35 @@ function M.get_ttable(showing)
 		cells[k] = M.get_cells(line, lengths)
 	end
 
+	-- Concat long lines
+	local fcells = {}
+	local is_cont = false
+	local last_key = 1
+	for k, entries in pairs(cells) do
+		if string.len(entries[1]) == 0 then
+			if not is_cont then
+				is_cont = true
+			end
+			fcells[last_key] = M.append_cells(fcells[last_key], entries, " ")
+		else
+			is_cont = false
+			last_key = k
+			fcells[last_key] = entries
+		end
+	end
+
+	-- Trim whitespace
+	local trimmed = {}
+	for k, v in pairs(fcells) do
+		local entry = {}
+		for kk, vv in pairs(v) do
+			entry[kk] = vim.trim(vv)
+		end
+		trimmed[k] = entry
+	end
+
 	-- Return table
-	local ttable = { title = showing, lengths = lengths, columns = columns, cells = cells }
+	local ttable = { title = showing, lengths = lengths, columns = columns, cells = trimmed }
 	return ttable
 end
 
@@ -108,7 +143,7 @@ function M.get_as_list(cells, columns)
 	local loutput
 	local output = { "" }
 	for k, cell in pairs(cells) do
-		loutput = "  - " .. columns[k] .. " : " .. cell
+		loutput = "  - " .. string.format("%" .. tostring(15) .. "s", columns[k]) .. " : " .. cell
 		table.insert(output, loutput)
 	end
 	table.insert(output, "")
