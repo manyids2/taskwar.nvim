@@ -52,7 +52,7 @@ function M.set_keymaps(keys, state)
 				error("No Treesitter parser found.")
 			end
 
-			if state.ttable.title == "list" then
+			if (state.ttable.title == "list") or (state.ttable.title == "next") then
 				-- get position of cursor
 				local is_in_list = M.is_in_list(node)
 				if is_in_list then

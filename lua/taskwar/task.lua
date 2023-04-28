@@ -2,7 +2,7 @@ local M = {}
 
 M.cols_line = 4
 M.dashes_line = 5
-M.summary_col = { list = 5, projects = 1, tags = 1 }
+M.summary_col = { next = 5, list = 5, projects = 1, tags = 1 }
 
 function M.extend_table(t1, t2)
 	for _, v in ipairs(t2) do

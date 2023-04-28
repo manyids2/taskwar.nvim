@@ -11,7 +11,7 @@ function M.setup(config)
 		config = {}
 	end
 	local default_config = {
-		home = "list",
+		home = "next",
     format = "compact",
 		theme = "catppuccin-latte",
 		keys = {
